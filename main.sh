@@ -170,6 +170,7 @@ sudo cpulimit -l 80 -- sudo kvm \
     -device nvme,serial=deadbeef,drive=nvm \
     -drive file=/mnt/os.qcow2,if=none,id=nvm \
     -drive file=/mnt/os.iso,media=cdrom \
+    -drive file=virtio.iso,media=cdrom \
     -drive if=pflash,format=raw,readonly=off,file=/usr/share/ovmf/OVMF.fd \
     -uuid e47ddb84-fb4d-46f9-b531-14bb15156336 \
     -vnc :0
