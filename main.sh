@@ -115,8 +115,9 @@ while true; do
             ;;
     esac
 done
-
-
+if [ ! -f virtio.iso ]; then
+    wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win.iso -O virtio.iso
+fi
 clear
 echo "Đang tải file ISO..."
 wget "$ados" -O /mnt/os.iso && echo -e "$green Tải thành công ISO!$reset" || { echo -e "$red Tải Không thành công ISO, Vui lòng chạy lại script.$reset"; exit 1; }
