@@ -78,7 +78,7 @@ clear
 
 # Chọn bệ điều hành muốn cài.
 while true; do
-    echo -e "$reset Hãy chọn Hệ Điều hành bạn muốn tải:\n
+    echo -e "Hãy chọn Hệ Điều hành bạn muốn tải:\n
     1. Windows 11 x64 English International\n
     2. Windows Server 2025 x64 English\n
     3. Windows Server 2012 R2 x64 English\n"
@@ -86,19 +86,29 @@ while true; do
     read -p "Chọn (Số): " stos
 
     case $stos in
-        1) ados=$(curl -fsSL "https://raw.githubusercontent.com/assnssters/GhCodeSpaceVPS/refs/heads/main/11link.txt");;
-        2) ados="https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us";;
-        3) ados="https://go.microsoft.com/fwlink/p/?LinkID=2195443&clcid=0x409&culture=en-us&country=US";;
-        *) echo -e "$red Lựa chọn không hợp lệ! Hãy thử lại.$reset"; continue;;
+        1) 
+            ados=$(curl -fsSL "https://raw.githubusercontent.com/assnssters/GhCodeSpaceVPS/refs/heads/main/11link.txt")
+            if [[ -z "$ados" ]]; then
+                echo "Lỗi khi tải đường dẫn. Hãy thử lại!"
+                continue
+            fi
+            break
+            ;;
+        2) 
+            ados="https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us"
+            break
+            ;;
+        3) 
+            ados="https://go.microsoft.com/fwlink/p/?LinkID=2195443&clcid=0x409&culture=en-us&country=US"
+            break
+            ;;
+        *) 
+            echo -e "Lựa chọn không hợp lệ! Hãy thử lại."
+            sleep 2
+            ;;
     esac
-
-    if [[ -z "$ados" ]]; then
-        echo -e "$red Lỗi khi tải đường dẫn. Hãy thử lại!$reset"
-        continue
-    fi
-
-    break
 done
+
 
 clear
 echo "Đang tải file ISO..."
