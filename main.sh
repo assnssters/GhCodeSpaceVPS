@@ -120,10 +120,11 @@ done
 clear
 echo "Đang tải file ISO..."
 wget "$ados" -O /mnt/os.iso && echo -e "$green Tải thành công ISO!$reset" || { echo -e "$red Tải Không thành công ISO, Vui lòng chạy lại script.$reset"; exit 1; }
-
+qemu-img create -f qcow2 /mnt/os.qcow2 401G
 clear
 
 # Lựa chọn cấu hình
+
 while true; do
     echo -e "Chọn cấu hình bạn muốn:\n
     1. Ram 4GB, CPU 4 Cores\n
@@ -146,7 +147,7 @@ clear
 echo "Cấu hình đã chọn: RAM=$ram, CPU=$cpu"
 echo "Kết nối qua VNC ports (5900)"
 
-sudo swtpm socket --tpmstate dir=/var/lib/swtpm --ctrl type=unixio,path=/var/lib/swtpm/swtpm-sock
+sudo swtpm socket --tpmstate dir=/var/lib/swtpm --ctrl type=unixio,path=/var/lib/swtpm/swtpm-sock &
 
 sudo cpulimit -l 80 -- sudo kvm \
     -cpu host,+topoext,hv_relaxed,hv_spinlocks=0x1fff,hv-passthrough,+pae,+nx,kvm=on,+svm \
