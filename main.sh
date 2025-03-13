@@ -119,10 +119,31 @@ case $chos in
        ;;
     *) echo "chọn lại.";sleep 2;;
 esac
-clear
+cls
 done
-
-
+qemu-img create -f qcow2 /mnt/os.qcow2 401G
+cls
+echo "kết nối qua VNC ports(5900)
+sudo cpulimit -l 80 -- sudo kvm \
+    -cpu host,+topoext,hv_relaxed,hv_spinlocks=0x1fff,hv-passthrough,+pae,+nx,kvm=on,+svm \
+    -smp $cpu \
+    -M q35,usb=on \
+    -device usb-tablet \
+    -m $ram \
+    -device virtio-balloon-pci \
+    -vga virtio \
+    -net nic,netdev=n0,model=virtio-net-pci \
+    -netdev user,id=n0,hostfwd=tcp::3389-:3389 \
+    -boot d \
+    -device virtio-serial-pci \
+    -device virtio-rng-pci \
+    -enable-kvm \
+    -device nvme,serial=deadbeef,drive=nvm \
+    -drive file=/mnt/os.qcow2,ìf=none,id=nvm
+    -drive file=/mnt/os.iso,media=cdrom \
+    -drive if=pflash,format=raw,readonly=off,file=/usr/share/ovmf/OVMF.fd \
+    -uuid e47ddb84-fb4d-46f9-b531-14bb15156336 \
+    -vnc :0
 
 
     
