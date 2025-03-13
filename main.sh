@@ -78,55 +78,78 @@ rm -rf swtpm/ libtpms/
 echo -ne "$reset"
 cls
 # Chọn ISO OS
+#!/bin/bash
+
 while true; do
-echo -ne """"$reset"hãy chọn Hệ Điều hành bạn muốn tải:
-    1. Windows 11 x64 English Interational
-    2. Windows Server 2025 x64 English
-    3. Windows Server 2012 R2 x64 English
-"""
-read -p "chọn ( Số ): " stos
+    echo -ne "$reset Hãy chọn Hệ Điều hành bạn muốn tải:\n
+    1. Windows 11 x64 English International\n
+    2. Windows Server 2025 x64 English\n
+    3. Windows Server 2012 R2 x64 English\n"
+    
+    read -p "Chọn (Số): " stos
+
     case $stos in
-        1) export ados="$(curl "https://raw.githubusercontent.com/assnssters/GhCodeSpaceVPS/refs/heads/main/11link.txt")";break;;
-        2) export ados="https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us";break;;
-        3) export ados="https://go.microsoft.com/fwlink/p/?LinkID=2195443&clcid=0x409&culture=en-us&country=US";break;;
-        *) echo -ne "$red Unknown Hãy chạy lại.$reset";;
+        1) 
+            ados=$(curl -fsSL "https://raw.githubusercontent.com/assnssters/GhCodeSpaceVPS/refs/heads/main/11link.txt")
+            if [[ -z "$ados" ]]; then
+                echo "Lỗi khi tải đường dẫn. Hãy thử lại!"
+                continue
+            fi
+            break
+            ;;
+        2) 
+            ados="https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us"
+            break
+            ;;
+        3) 
+            ados="https://go.microsoft.com/fwlink/p/?LinkID=2195443&clcid=0x409&culture=en-us&country=US"
+            break
+            ;;
+        *) 
+            echo -e "$red Lựa chọn không hợp lệ! Hãy thử lại.$reset"
+            ;;
     esac
-clear
 done
-wget $ados -O /mnt/os.iso && echo -ne "Tải thành công ISO!" || failu
+
+clear
+
+done
+wget $ados -O /mnt/os.iso && echo -ne "Tải thành công ISO!" || failu "Tải Không thành công ISO, Vui lòng Chạy Lại script."
 cls
 # Chọn Cấu hình
+
 while true; do
-echo -ne """Chọn cấu hình bạn muốn:
-    1. Ram 4Gb, CPU 4 Cores(1)
-    2. Ram 8Gb, CPU 4,4 Cores(1)
-    3. Ram 4Gb, CPU 2 Cores(2)
-    4. Ram 2Gb, CPU 2,2 Cores(2)
-"""
-read -p "chọn (số): " chos
-case $chos in
-    1) export ram=4G
-       export cpu="cores=8"
-       break
-       ;;
-    2) export ram=8G
-       export cpu="4,cores=4"
-       break
-       ;;
-    3) export ram=4G
-       export cpu="cores=2"
-       break
-       ;;
-    4) export ram=2G
-       export cpu="2,cores=2"
-       break
-       ;;
-    *) echo "chọn lại.";sleep 2;;
-esac
-cls
+    echo -ne "Chọn cấu hình bạn muốn:\n
+    1. Ram 4GB, CPU 4 Cores\n
+    2. Ram 8GB, CPU 4 Cores\n
+    3. Ram 4GB, CPU 2 Cores\n
+    4. Ram 2GB, CPU 2 Cores\n"
+
+    read -p "Chọn (số): " chos
+
+    case $chos in
+        1) export ram="4G"
+           export cpu="cores=4"
+           break
+           ;;
+        2) export ram="8G"
+           export cpu="cores=4"
+           break
+           ;;
+        3) export ram="4G"
+           export cpu="cores=2"
+           break
+           ;;
+        4) export ram="2G"
+           export cpu="cores=2"
+           break
+           ;;
+        *) echo "Lựa chọn không hợp lệ. Vui lòng thử lại!"; sleep 2;;
+    esac
 done
-qemu-img create -f qcow2 /mnt/os.qcow2 401G
-cls
+
+clear
+echo "Cấu hình đã chọn: RAM=$ram, CPU=$cpu"
 echo "kết nối qua VNC ports(5900)"
 sudo cpulimit -l 80 -- sudo kvm \
     -cpu host,+topoext,hv_relaxed,hv_spinlocks=0x1fff,hv-passthrough,+pae,+nx,kvm=on,+svm \
