@@ -161,7 +161,7 @@ sudo cpulimit -l 80 -- sudo kvm \
     -boot d \
     -device virtio-serial-pci \
     -device virtio-rng-pci \
-    -chardev socket,id=chrtpm,path=/tmp/mytpm1/swtpm-sock \
+    -chardev socket,id=chrtpm,path=/var/lib/swtpm/swtpm-sock \
     -tpmdev emulator,id=tpm0,chardev=chrtpm \
     -device tpm-tis,tpmdev=tpm0 \
     -enable-kvm \
