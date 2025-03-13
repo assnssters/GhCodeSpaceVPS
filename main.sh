@@ -40,7 +40,7 @@ fi
 # Cập nhật Và Tải Các gói
 echo -e "$yellow Cập nhật kho lưu trữ...$reset"
 sudo apt update -y > /dev/null 2>&1
-sudo apt install p7zip-full > /dev/null 2>&1
+sudo apt install p7zip-full cpulimit -y > /dev/null 2>&1
 echo -e "$yellow Cài đặt QEMU-KVM...$reset"
 if ! command -v kvm &>/dev/null; then
     echo "Lệnh 'kvm' không tồn tại, đang cài đặt QEMU-KVM..."
@@ -74,9 +74,16 @@ if ! command -v swtpm &>/dev/null; then
     rm -rf swtpm/ libtpms/
 fi
 
+if [ ! -d "/var/lib/swtpm" ]; then
+    echo "Thư mục /var/lib/swtpm không tồn tại, đang tạo..."
+    sudo mkdir -p /var/lib/swtpm
+    sudo chmod 777 /var/lib/swtpm
+fi
+
+
 clear
 
-# Chọn bệ điều hành muốn cài.
+# Chọn hệ điều hành muốn cài.
 while true; do
     echo -e "Hãy chọn Hệ Điều hành bạn muốn tải:\n
     1. Windows 11 x64 English International\n
@@ -139,7 +146,7 @@ clear
 echo "Cấu hình đã chọn: RAM=$ram, CPU=$cpu"
 echo "Kết nối qua VNC ports (5900)"
 
-sudo swtpm socket --tpmstate dir=/tmp/mytpm1 --ctrl type=unixio,path=/tmp/mytpm1/swtpm-sock --tpm2 &
+sudo swtpm socket --tpmstate dir=/var/lib/swtpm --ctrl type=unixio,path=/var/lib/swtpm/swtpm-sock
 
 sudo cpulimit -l 80 -- sudo kvm \
     -cpu host,+topoext,hv_relaxed,hv_spinlocks=0x1fff,hv-passthrough,+pae,+nx,kvm=on,+svm \
