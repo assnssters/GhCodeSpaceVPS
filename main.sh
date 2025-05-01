@@ -86,7 +86,7 @@ clear
 # Chọn hệ điều hành muốn cài.
 while true; do
     echo -e "Hãy chọn Hệ Điều hành bạn muốn tải:\n
-    1. Windows 11 x64 English International\n
+    1. Windows 11 x64 English International (Lỗi)\n
     2. Windows Server 2025 x64 English\n
     3. Windows Server 2012 R2 x64 English\n"
 
@@ -115,7 +115,7 @@ while true; do
             ;;
     esac
 done
-    wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win.iso -O virtio.is
+    wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win.iso -O virtio.iso
 clear
 echo "Đang tải file ISO..."
 wget "$ados" -O /mnt/os.iso && echo -e "$green Tải thành công ISO!$reset" || { echo -e "$red Tải Không thành công ISO, Vui lòng chạy lại script.$reset"; exit 1; }
