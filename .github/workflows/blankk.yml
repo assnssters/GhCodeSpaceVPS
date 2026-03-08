@@ -1,0 +1,22 @@
+name: Tmate SSH
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ssh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install tmate
+        run: |
+          sudo apt update
+          sudo apt install -y tmate
+
+      - name: Start tmate session
+        run: |
+          tmate -F
